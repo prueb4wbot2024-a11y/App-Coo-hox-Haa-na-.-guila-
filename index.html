@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Admin</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<h1>Panel Admin</h1>
+<div id="admin"></div>
+
+<script>
+fetch('/negocios')
+.then(r=>r.json())
+.then(data=>{
+ const cont=document.getElementById('admin');
+ data.forEach(n=>{
+  const div=document.createElement('div');
+  div.className='card';
+  div.innerHTML=`<h3>${n.nombre}</h3>`;
+  cont.appendChild(div);
+ });
+});
+</script>
+</body>
+</html>
