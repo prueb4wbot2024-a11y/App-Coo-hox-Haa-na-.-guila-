@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Login</title>
+</head>
+
+<body style="background:#0f172a;color:white;text-align:center;padding-top:50px;">
+
+<h2>🔐 Acceso Negocio</h2>
+
+<input id="user" placeholder="Usuario"><br><br>
+<input id="pass" type="password" placeholder="Contraseña"><br><br>
+
+<button onclick="login()">Entrar</button>
+
+<script>
+async function login(){
+  const res = await fetch('/login',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      user:document.getElementById('user').value,
+      pass:document.getElementById('pass').value
+    })
+  });
+
+  const data = await res.json();
+
+  if(data.ok){
+    window.location = "/admin.html";
+  }else{
+    alert("❌ Error");
+  }
+}
+</script>
+
+</body>
+</html>
