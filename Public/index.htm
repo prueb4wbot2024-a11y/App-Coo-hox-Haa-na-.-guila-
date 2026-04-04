@@ -228,3 +228,8 @@ L.marker([20.9676,-89.6237]).addTo(map).bindPopup('Coo\'hox Haa\'na')
 </body>
   </html>
 <link rel="manifest" href="manifest.json">
+<script>
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('/sw.js');
+}
+</script>
