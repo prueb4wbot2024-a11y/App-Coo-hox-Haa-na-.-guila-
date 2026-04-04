@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panel Admin - Aguila</title>
+
+<style>
+body{
+  margin:0;
+  font-family:Arial;
+  background:#0f172a;
+  color:white;
+}
+
+header{
+  background:#020617;
+  padding:15px;
+  text-align:center;
+  font-size:20px;
+  font-weight:bold;
+  color:#facc15;
+}
+
+.container{
+  padding:15px;
+}
+
+.card{
+  background:#1e293b;
+  padding:15px;
+  border-radius:10px;
+  margin-bottom:10px;
+}
+
+button{
+  margin-top:5px;
+  padding:6px 10px;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+.nuevo{background:#3b82f6;}
+.preparando{background:#f59e0b;}
+.listo{background:#22c55e;}
+.entregado{background:#6b7280;}
+
+.total{
+  font-size:18px;
+  font-weight:bold;
+  margin-top:10px;
+}
+</style>
+
+</head>
+
+<body>
+
+<header>🦅 Panel Admin - Coo'hox Haa'na</header>
+
+<div class="container">
+
+  <div class="card">
+    <h3>📊 Ventas del día</h3>
+    <div id="ventas">$0</div>
+  </div>
+
+  <div id="pedidos"></div>
+
+</div>
+
+<script src="admin.js"></script>
+
+</body>
+</html>
