@@ -63,3 +63,8 @@ function activarVoz() {
 
   recognition.start();
 }
+function pagar(total){
+  const link = `https://wa.me/529991234567?text=Quiero pagar $${total}`;
+  window.open(link);
+}
+<button onclick="pagar(200)">💳 Pagar</button>
