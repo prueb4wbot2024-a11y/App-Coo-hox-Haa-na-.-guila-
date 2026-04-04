@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coo'hox Haa'na - Águila</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+
+<style>
+:root{
+  --gold:#d4a843;
+  --dark:#0f0f0f;
+  --card:#1a1a1a;
+}
+
+body{
+  margin:0;
+  font-family:'Cinzel',serif;
+  background:#000;
+  color:white;
+}
+
+/* HEADER */
+.header{
+  background:linear-gradient(black,transparent),
+  url('https://images.unsplash.com/photo-1603569283847-aa295f0d016a');
+  background-size:cover;
+  padding:40px 20px;
+  text-align:center;
+}
+
+.header h1{
+  color:var(--gold);
+  font-size:28px;
+}
+
+.tag{
+  opacity:.8;
+}
+
+/* TABS */
+.tabs{
+  display:flex;
+  background:#111;
+}
+.tab-btn{
+  flex:1;
+  padding:12px;
+  background:#111;
+  border:none;
+  color:white;
+}
+.tab-btn.active{
+  background:var(--gold);
+  color:black;
+}
+
+/* CONTENIDO */
+.container{padding:15px}
+
+/* MENU */
+.mgrid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+}
+.mitem{
+  background:var(--card);
+  padding:15px;
+  border-radius:10px;
+  text-align:center;
+  cursor:pointer;
+}
+.mitem:hover{
+  background:var(--gold);
+  color:black;
+}
+
+/* TICKET */
+.ticket{
+  margin-top:20px;
+  background:#111;
+  padding:15px;
+  border-radius:10px;
+}
+.ticket h2{color:var(--gold)}
+.total{margin-top:10px;font-size:18px}
+
+.btn{
+  margin-top:10px;
+  padding:12px;
+  width:100%;
+  border:none;
+  border-radius:10px;
+  font-weight:bold;
+}
+
+.bg{background:var(--gold);color:black}
+.whatsapp{background:#25D366;color:white}
+
+#map{height:300px;margin-top:10px;border-radius:10px}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+<h1>🦅 Coo'hox Haa'na</h1>
+<p class="tag">Sabores Mayas de Mérida</p>
+</header>
+
+<div class="tabs">
+<button class="tab-btn active" data-tab="inicio">Inicio</button>
+<button class="tab-btn" data-tab="menu">Menú</button>
+<button class="tab-btn" data-tab="ubicacion">Ubicación</button>
+</div>
+
+<div class="container">
+
+<!-- INICIO -->
+<div id="inicio" class="tab-content active">
+<p>Bienvenido a la experiencia maya gastronómica.</p>
+</div>
+
+<!-- MENU -->
+<div id="menu" class="tab-content" style="display:none;">
+<div class="mgrid">
+
+<div class="mitem" data-nombre="Cochinita Pibil" data-precio="185">🥩 Cochinita $185</div>
+<div class="mitem" data-nombre="Panuchos" data-precio="120">🌮 Panuchos $120</div>
+<div class="mitem" data-nombre="Sopa de Lima" data-precio="140">🍲 Sopa $140</div>
+<div class="mitem" data-nombre="Queso Relleno" data-precio="195">🧀 Queso $195</div>
+<div class="mitem" data-nombre="Chocolate" data-precio="65">🍫 Chocolate $65</div>
+<div class="mitem" data-nombre="Atole" data-precio="50">🍶 Atole $50</div>
+
+</div>
+
+<div class="ticket">
+<h2>🧾 Pedido</h2>
+<div id="lista"></div>
+<div class="total" id="total">Total: $0</div>
+
+<button class="btn bg" onclick="limpiar()">Limpiar</button>
+<button class="btn whatsapp" onclick="enviarWhats()">Enviar por WhatsApp</button>
+</div>
+</div>
+
+<!-- UBICACION -->
+<div id="ubicacion" class="tab-content" style="display:none;">
+<div id="map"></div>
+</div>
+
+</div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+// TABS
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.onclick=()=>{
+    document.querySelectorAll('.tab-content').forEach(c=>c.style.display='none')
+    document.getElementById(btn.dataset.tab).style.display='block'
+  }
+})
+
+// CARRITO
+let carrito=[]
+
+document.querySelectorAll('.mitem').forEach(item=>{
+  item.onclick=()=>{
+    carrito.push({
+      nombre:item.dataset.nombre,
+      precio:Number(item.dataset.precio)
+    })
+    render()
+  }
+})
+
+function render(){
+  let html=''
+  let total=0
+
+  carrito.forEach(p=>{
+    html+=`<p>${p.nombre} - $${p.precio}</p>`
+    total+=p.precio
+  })
+
+  document.getElementById('lista').innerHTML=html
+  document.getElementById('total').innerText='Total: $'+total
+}
+
+// LIMPIAR
+function limpiar(){
+  carrito=[]
+  render()
+}
+
+// WHATSAPP
+function enviarWhats(){
+  if(carrito.length===0){
+    alert('Agrega productos')
+    return
+  }
+
+  let texto='Pedido:%0A'
+  let total=0
+
+  carrito.forEach(p=>{
+    texto+=`- ${p.nombre} $${p.precio}%0A`
+    total+=p.precio
+  })
+
+  texto+=`Total: $${total}`
+
+  let numero='529991234567' // CAMBIA ESTE NUMERO
+
+  window.open(`https://wa.me/${numero}?text=${texto}`)
+}
+
+// MAPA
+const map = L.map('map').setView([20.9676,-89.6237],13)
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map)
+L.marker([20.9676,-89.6237]).addTo(map).bindPopup('Coo\'hox Haa\'na')
+</script>
+
+</body>
+  </html>
